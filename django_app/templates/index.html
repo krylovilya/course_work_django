@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load poll_extras %}
+{% block title %} Главная страница {% endblock %}
+{% block other_btn %}
+    <a class="modal-trigger" href="#modal1">Добавить пин</a>
+{% endblock %}
+{% block other_btn_mobile %}
+    <a class="modal-trigger" href="#modal1">Добавить пин</a>
+{% endblock %}
+{% block other_structure %}
+    <!-- AddPin Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Добавить пин</h4>
+             <form action="add_pin/" method="post">
+                 {% csrf_token %}
+                 {{ add_pin_form.as_p }}
+                 <button class="btn waves-effect waves-light" type="submit">Добавить
+                     <i class="material-icons right">add</i>
+                 </button>
+             </form>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <script src="{% static "js/ajax_get_likes.js" %}"></script>
+    <script src="{% static "js/like_click.js" %}"></script>
+    <div id="portfolio" class="section gray">
+    <div class="container">
+        <div class="gallery row">
+            {% for pin in all_pin %}
+                <div class="col l4 m6 s12 gallery-item gallery-expand gallery-filter sintel" >
+                    <div class="gallery-curve-wrapper">
+                        <a class="gallery-cover gray">
+                            <img src="{{ pin.photo }}" alt="placeholder" style="width: 100%; border: none;">
+                        </a>
+                        <div class="gallery-header">
+                            <div id="pin_id" class="hiddendiv">{{ pin.id }}</div>
+                            <span>{{ pin.title }}</span>
+                        </div>
+                        <div class="gallery-body">
+                            <div class="title-wrapper">
+                                <h3> {{ pin.title }} </h3>
+                                <h5>Автор <a href="/user/{{ pin.autor.username }}">{{ pin.autor.username }}</a></h5>
+                            </div>
+                            <p class="description">
+                                {{ pin.text }}
+                            </p>
+
+                        </div>
+                        <div class="gallery-action">
+                            <a class="btn-floating btn-large waves-effect waves-light" data-id="{{ pin.id }}" data-count="like">{{ likes | get_pin_like:pin.id }}</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<a class="btn-floating btn-large waves-effect waves-light purple lighten-2 {% if pagination == 1 %} disabled {% endif %}"
+    style="position: fixed; left: 10px; bottom: 10%; z-index: 10" {% if max_pagination > 1 %} href="?pagination={{pagination | add:-1}}" {% endif %}>
+    <i class="material-icons">navigate_before</i></a>
+<a class="btn-floating btn-large waves-effect waves-light purple lighten-2 {% if pagination == max_pagination  %} disabled {% endif %}"
+    style="position: fixed; right: 10px; bottom: 10%; z-index: 10" {% if pagination < max_pagination %} href="?pagination={{pagination | add:1}}" {% endif %}>
+    <i class="material-icons">navigate_next</i></a>
+{% if msg %}
+    <script>M.toast({html: '{{ msg }}'})</script>
+{% endif %}
+{% endblock %}

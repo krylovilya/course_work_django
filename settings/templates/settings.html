@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+{%  load staticfiles %}
+{% block title %}Настройки{% endblock %}
+{% block nav_header %}
+    <h1>Настройки пользователя</h1>
+{% endblock %}
+{% block js %}
+{% endblock %}
+{% block content %}
+
+        <div class="row">
+            <div class="col s12 m5">
+                <div class="card-panel no-padding">
+                    <div class="collection">
+                        <a href="change_password/" class="collection-item">Сменить пароль</a>
+                        <a href="change_email/" class="collection-item">Сменить email</a>
+                        <a href="change_photo/" class="collection-item">Сменить фотографию профиля</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+{%  load staticfiles %}
+{% block title %}{{ user.get_full_name }}{% endblock %}
+{% block nav_header %}
+    <h1>{{ user.get_full_name }}</h1>
+{% endblock %}
+{% block js %}
+    <script src="{% static "js/ajax_get_all_pins_old.js" %}"></script>
+    <script src="{% static "js/like_click.js" %}"></script>
+{% endblock %}
+{% block content %}
+
+    <div class="row">
+        <div class="col">
+            {% if user.photo %}
+                <img alt="photo" class="materialboxed" width="250" src="{{ user.photo }}">
+            {% else %}
+                <script>M.toast({html: 'Отсутствует фотография пользователя'})</script>
+            {% endif %}
+        </div>
+        <div class="col">
+            {% if username %}<h6>логин: {{ username }}</h6> {% endif %}
+            {% if user.gender == "man" or user.gender == "woman" %}<h6>Пол: {{ user.gender | get_gender }}</h6> {% endif %}
+            {% if user.email %}<h6>email: {{ user.email }}</h6> {% endif %}
+            {% if user.date_birth %}<h6>Дата рождения: {{ user.date_birth }}</h6> {% endif %}
+            {% if user.last_login %}<h6>Последний вход: {{ user.last_login}}</h6> {% endif %}
+            <h6>Количество пинов: {{ all_pins.count}}</h6>
+        </div>
+    </div>
+    <div class="container">
+        <div class="gallery row">
+            {% for pin in all_pins %}
+                <div class="col l4 m6 s12 gallery-item gallery-expand gallery-filter sintel">
+                    <div class="gallery-curve-wrapper">
+                        <a class="gallery-cover gray">
+                            <img src="{{ pin.photo }}" alt="placeholder" style="width: 100%; border: none;">
+                        </a>
+                        <div class="gallery-header">
+                            <span>{{ pin.title }}</span>
+                        </div>
+                        <div class="gallery-body">
+                            <div class="title-wrapper">
+                                <h3> {{ pin.title }} </h3>
+                                <h5>Автор {{ pin.autor.username }}</h5>
+                            </div>
+                            <p class="description">
+                                {{ pin.text }}
+                            </p>
+
+                        </div>
+                        <div class="gallery-action">
+                            <a class="btn-floating btn-large waves-effect waves-light" data-id="{{ pin.id }}" data-count="like">{{ likes | get_pin_like:pin.id }}</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

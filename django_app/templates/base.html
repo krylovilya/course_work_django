@@ -1,0 +1,92 @@
+{% load staticfiles %}
+{% load poll_extras %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Главная страница {% endblock %}</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{% static "css/gallery-materialize.min.css"%}" media="screen,projection" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="{% static "js/materialize.min.js" %}"></script>
+    <link href=
+    "{% static "css/gallery-materialize.min.css" %}"
+     rel="stylesheet">
+    <script src="{% static "js/imagesloaded.pkgd.min.js" %}"></script>
+    <script src="{% static "js/masonry.pkgd.min.js" %}"></script>
+    <script src="{% static "js/color-thief.min.js" %}"></script>
+    <script src="{% static "js/galleryExpand.js" %}"></script>
+    <script src="{% static "js/init.js" %}"></script>
+    <!--<script src="{% static "js/ajax_get_all_pins_old.js" %}"></script>-->
+    <script>
+        $(document).ready(function () {
+              M.AutoInit();
+            $('.sidenav').sidenav();
+        });
+    </script>
+    {% block js %}
+    {% endblock %}
+</head>
+<body>
+    <nav class="nav-extended">
+        <div class="nav-wrapper container">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <a href="/" class="brand-logo"><i class="material-icons">adjust</i>Shminterest</a>
+            <ul class="right hide-on-med-and-down">
+                {% if user.is_authenticated %}
+                    <li><a href="/logout">Выход</a></li>
+                {% else %}
+                    <li><a href="/register">Регистрация</a></li>
+                    <li><a href="/login">Вход</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="nav-header valign-wrapper">
+            {% block nav_header %}
+                <h1>Лучший фотохостинг!</h1>
+                <div class="tagline">Я серьёзно.</div>
+            {% endblock %}
+            {% if user.is_authenticated %}
+            <ul class="hide-on-med-and-down">
+                <li><a href="/">Главная страница</a></li>
+                <li><a href="/user/">Профиль</a></li>
+                <li><a href="/settings/">Настройки</a></li>
+                <li>{% block other_btn %}{% endblock %}</li>
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+    <ul class="sidenav" id="mobile-demo">
+        {% if user.is_authenticated %}
+            <li class="center"><span>Привет, {{ user }}</span></li>
+            <div class="divider"></div>
+            <li><a href="/">Главная страница</a></li>
+            <li><a href="/user/">Профиль</a></li>
+            <li><a href="/settings/">Настройки</a></li>
+            <li>{% block other_btn_mobile %}{% endblock %}</li>
+            <li><a href="/logout">Выход</a></li>
+        {% else %}
+            <li><a href="/register">Регистрация</a></li>
+            <li><a href="/login">Вход</a></li>
+        {% endif %}
+    </ul>
+    {% block other_structure %}{% endblock %}
+    <div class="preloader-wrapper big active" style="position: absolute; top: 50%; left: 50%;">
+      <div class="spinner-layer spinner-blue">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+    <div id="block_content" class="container" style="padding-top:10px; display: none;">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

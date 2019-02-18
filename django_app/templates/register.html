@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %} Регистрация {% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col s12 m5">
+            <div class="card-panel">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {# form.as_p #}
+                    {% for field in form %}
+                        <label for="">{{ field.label }}</label>
+                        <div>{{ field }}</div>
+                        {% if field.errors %}
+                            <p>{{ field.errors }}</p>
+                        {% endif %}
+                    {% endfor %}
+                    <button class="btn waves-effect waves-light" type="submit" id="reg_btn">Регистрация
+                        <i class="material-icons right">send</i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{% static "js/ajax_validate_email.js" %}"></script>
+{% endblock %}
